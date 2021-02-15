@@ -5,6 +5,10 @@ let registerButton = document.querySelector('.register');
 let regexRU = /^[?!,.а-яА-ЯёЁ]/;
 let regexEN = /^[a-zA-Z0-9._]/;
 let regexPassword = /^[a-zA-Z0-9]/;
+let usersList = document.querySelector('.users-list');
+
+
+
 let months = {
   1: 'января',
   2: 'Февраля',
@@ -18,9 +22,24 @@ let months = {
   0: 'Октября',
   11: 'Ноября',
   12: 'Декабря',
-}
+};
 
 let users = [];
+
+function render() {
+  let usersLocalStorage = JSON.parse(localStorage.getItem('users'));
+  usersLocalStorage.forEach(function(item) {
+    let userElement = 
+    `<li>Имя: 
+    ${item.firstName}, 
+    фамилия: 
+    ${item.lastName}, 
+    зарегистрирован: 
+    ${item.regDate}
+    </li>`;
+    usersList.insertAdjacentHTML('beforeend', userElement);
+  });
+}
 
 registerButton.addEventListener('click', function() {
   let FirstNameAndLastName, login, password, regDate, regTime;
@@ -46,11 +65,25 @@ registerButton.addEventListener('click', function() {
   regDate = new Date().toLocaleDateString();
   regTime = new Date().toLocaleTimeString();
   let newUser = {
-    'fistName' : userArray[0],
+    'firstName' : userArray[0],
     'lastName' : userArray[1],
     'login' : login,
     'password' : password,
-    'regDate' : `${regDate.slice(0,2)} ${months[regDate.slice(3,4)]} ${regDate.slice(6)} г., ${regTime}`
+    'regDate' : 
+    `${regDate.slice(0,2)} ${months[regDate.slice(4,5)]} ${regDate.slice(6)} г., ${regTime}`
   };
   users.push(newUser);
+  localStorage.users = (JSON.stringify(users));
+  let userElement = 
+  `<li>Имя: 
+  ${newUser.firstName}, 
+  фамилия: 
+  ${newUser.lastName}, 
+  зарегистрирован: 
+  ${newUser.regDate}
+  </li>`;
+  usersList.insertAdjacentHTML('beforeend', userElement);
 });
+
+render();
+
