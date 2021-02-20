@@ -28,6 +28,7 @@ let users = [];
 
 function render() {
   let usersLocalStorage = JSON.parse(localStorage.getItem('users'));
+  usersList.textContent =  '';
   usersLocalStorage.forEach(function(item) {
     let userElement = 
     `<li>Имя: 
@@ -72,17 +73,16 @@ registerButton.addEventListener('click', function() {
     'regDate' : 
     `${regDate.slice(0,2)} ${months[regDate.slice(4,5)]} ${regDate.slice(6)} г., ${regTime}`
   };
-  users.push(newUser);
-  localStorage.users = (JSON.stringify(users));
-  let userElement = 
-  `<li>Имя: 
-  ${newUser.firstName}, 
-  фамилия: 
-  ${newUser.lastName}, 
-  зарегистрирован: 
-  ${newUser.regDate}
-  </li>`;
-  usersList.insertAdjacentHTML('beforeend', userElement);
+  if (localStorage.users) {
+    let localStorageUsers = JSON.parse(localStorage.users);
+    localStorageUsers.push(newUser);
+    localStorage.users = JSON.stringify(localStorageUsers);
+  } else {
+    let users = [];
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+  render();
 });
 
 render();
