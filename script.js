@@ -27,8 +27,8 @@ let months = {
 let users = [];
 
 function render() {
-  let usersLocalStorage = JSON.parse(localStorage.getItem('users'));
-  usersList.textContent =  '';
+  let usersLocalStorage = localStorage.getItem('users') !== null ?  JSON.parse(localStorage.getItem('users')) : [];
+  usersList.textContent = '';
   usersLocalStorage.forEach(function(item) {
     let userElement = 
     `<li>Имя: 
