@@ -1,11 +1,12 @@
 'use strict';
 
-let autorizeButton = document.querySelector('.autorize');
-let registerButton = document.querySelector('.register');
-let regexRU = /^[?!,.а-яА-ЯёЁ]/;
-let regexEN = /^[a-zA-Z0-9._]/;
-let regexPassword = /^[a-zA-Z0-9]/;
-let usersList = document.querySelector('.users-list');
+const autorizeButton = document.querySelector('.autorize');
+const registerButton = document.querySelector('.register');
+const regexRU = /^[?!,.а-яА-ЯёЁ]/;
+const regexEN = /^[a-zA-Z0-9._]/;
+const regexPassword = /^[a-zA-Z0-9]/;
+const usersList = document.querySelector('.users-list');
+const helloUser = document.querySelector('.hello-user');
 
 let months = {
   1: 'января',
@@ -61,6 +62,7 @@ registerButton.addEventListener('click', function() {
   while (
   !password.match(regexPassword) ||
   password === null);
+
   let userArray = FirstNameAndLastName.split(' ');
   regDate = new Date().toLocaleDateString();
   regTime = new Date().toLocaleTimeString();
@@ -100,6 +102,24 @@ usersList.addEventListener('DOMNodeInserted', () => {
 
 });
 
+autorizeButton.addEventListener('click', () => {
+  let login;
+  let password;
+  do {
+    login = prompt('Введите логин');
+  } while (!login.match(regexEN) || login === null);
+  do {
+    password = prompt('Введите пароль');
+  } while (!password.match(regexPassword) || password === null);
+  let localStorageUsers = JSON.parse(localStorage.users);
+  localStorageUsers.forEach(item => {
+    if (item.login === login && item.password === password) {
+      helloUser.textContent = `Привет ${item.firstName}`;
+    } else {
+      alert('Пользователь не найден');
+    }
+  });
+});
 
 render();
 
