@@ -7,8 +7,6 @@ let regexEN = /^[a-zA-Z0-9._]/;
 let regexPassword = /^[a-zA-Z0-9]/;
 let usersList = document.querySelector('.users-list');
 
-
-
 let months = {
   1: 'января',
   2: 'Февраля',
@@ -31,12 +29,13 @@ function render() {
   usersList.textContent = '';
   usersLocalStorage.forEach(function(item) {
     let userElement = 
-    `<li>Имя: 
+    `<li class="user">Имя: 
     ${item.firstName}, 
     фамилия: 
     ${item.lastName}, 
     зарегистрирован: 
-    ${item.regDate}
+    ${item.regDate},
+    <button class="delete-user">Удалить пользователя</button>
     </li>`;
     usersList.insertAdjacentHTML('beforeend', userElement);
   });
@@ -84,6 +83,23 @@ registerButton.addEventListener('click', function() {
   }
   render();
 });
+
+usersList.addEventListener('DOMNodeInserted', () => {
+  const usersElements = document.querySelectorAll('.user');
+  usersElements.forEach((item, i) => {
+    item.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target.className === 'delete-user') {
+        let usersLocalStorage = JSON.parse(localStorage.getItem('users'));
+        usersLocalStorage.splice(i,1);
+        localStorage.users = JSON.stringify(usersLocalStorage);
+        render();
+      }
+    });
+  });
+
+});
+
 
 render();
 
